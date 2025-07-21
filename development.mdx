@@ -1,94 +1,91 @@
 ---
-title: 'Development'
-description: 'Preview changes locally to update your docs'
+title: "Development"
+description: "—
+Sentence Structure evaluator development
+
+Original SCASS rubric ⏵ Machine-compatible rubric development ⏵ Human annotation ⏵ Evaluator creation ⏵
+
+We started with the SCASS rubric and modified it to be more precise for human and machine interpretation. Then we tested it with 4 human experts to ensure consistent results.
+
+Original SCASS qualitative sentence structure rubric {#original-scass-qualitative-sentence-structure-rubric}
+We started with the SCASS rubric sentence structure section of language features.
+
+Language features
+
+Conventionality
+
+Vocabulary
+
+Sentence structure
+
+Slightly complex
+
+Explicit, literal, straightforward, easy to understand.
+
+Contemporary, familiar, conversational language.
+
+Mainly simple sentences.
+
+Moderately complex
+
+Largely explicit and easy to understand with some occasions for more complex meaning.
+
+Mostly contemporary, familiar, conversational; rarely overly academic.
+
+Structure: Primarily simple and compound sentences, with some complex structures.
+
+Very complex
+
+Fairly complex; contains some abstract, ironic, and/or figurative language.
+
+Fairly complex language that is sometimes unfamiliar, archaic, subject-specific, or overly academic.
+
+Many complex sentences with several subordinate phrases or clauses and transition words.
+
+Exceedingly complex
+
+Dense and complex; contains considerable abstract, ironic, and/or figurative language.
+
+Complex, generally unfamiliar, archaic, subject-specific, or overly academic language; may be ambiguous or purposefully misleading.
+
+Mainly complex sentences with several subordinate clauses or phrases and transition words; sentences often contain multiple concepts.
+
+Taken from the SCASS rubric for qualitative text complexity from Student Achievement Partners (SAP)
+
+Machine-compatible rubric development {#machine-compatible-rubric-development}
+The SCASS rubric provides a great starting point, however, the definitions of each evaluator left room for interpretation due to words like mainly, primarily, and many. This created inconsistent results in the next step, the human annotation process.
+
+Through several rounds of interviews and annotation by 4 experts, we created a more human and machine-compatible framing for each level of complexity. This framing allows the evaluator to work consistently and accurately.
+— Final rubric
+Slightly complex
+
+Moderately complex
+
+Very complex
+
+Exceedingly complex
+
+A text is in the Slightly Complex bucket if it has at least 50% simple sentences. If it doesn’t, the text is a higher level of complexity. If the % of simple sentences is >= 50% and the % of compound sentences is >= 20%, the text is Moderately Complex, otherwise, the text is Slightly Complex. Slightly Complex texts NEVER have advanced complex sentences — the presence of an advanced complex sentence always leads to a higher level of complexity than Slightly.
+
+These texts can take on any distribution of sentence types as long as there aren’t more than 2 advanced complex sentences and as long as there aren’t so many simple sentences that the text becomes Slightly Complex. That means Moderately Complex texts may have many simple sentences (although not so many that the text is Slightly Complex), compound sentences, and/or basic complex sentences. It’s also possible for a moderately complex text to contain one or two advanced complex sentences, as long as there aren’t more than 2. If there are more than 2, then the text is either Very or Exceedingly complex.
+
+These texts contain 3 or more advanced complex sentences (unless the percentage of advanced complex sentences is >= 65)%, in which case the text becomes Exceedingly Complex). They may still contain many simple, compound, and basic complex sentences, but a text is not very complex unless there are more than 3 or more advanced complex sentences.
+
+These texts have 65%+ of their sentences being advanced complex sentences.
+
+Human annotation {#human-annotation}
+With the rubric complete and adhering to the pedagogical intent, we created a full, reliable benchmark dataset. We created this dataset with 4 pedagogical experts — 1 from Achievement Network (ANET) and 3 from Gradient Learning — all of whom had prior experience in literacy instruction and/or curriculum development.
+
+We created a dataset of more than 100 AI-generated text passages that cover a diverse list of informational topics that teachers might generate for students between grades 2 and 6 (e.g., “The water cycle” or “the civil rights movement.”)
+
+The human annotators scored this dataset individually and then checked for agreement between them. About 80% of the scored passages had perfect agreement among annotators, which meets the What Works Clearinghouse reliability standards (see page 27 of the WWC Procedures and Standards Handbook).
+
+Evaluator creation {#evaluator-creation}
+Once we had a high-quality dataset, we were able to develop the sentence structure evaluator following the annotators’ approach.
+
+We tested different permutations of prompts, models, and temperature settings looking for patterns in errors, and tuning our approach. In total, we ran over 500 experiments across 13 models, more than 10 prompts, and a range of temperature settings to define this evaluator.
+
+
+
+© 2025 The Chan Zuckerberg Initiative Written with StackEdit.Preview changes locally to update your docs"
 ---
-
-<Info>
-  **Prerequisites**:
-  - Node.js version 19 or higher
-  - A docs repository with a `docs.json` file
-</Info>
-
-Follow these steps to install and run Mintlify on your operating system.
-
-<Steps>
-<Step title="Install the Mintlify CLI">
-
-```bash
-npm i -g mint
-```
-</Step>
-
-<Step title="Preview locally">
-
-Navigate to your docs directory where your `docs.json` file is located, and run the following command:
-
-```bash
-mint dev
-```
-
-A local preview of your documentation will be available at `http://localhost:3000`.
-
-</Step>
-</Steps>
-
-## Custom ports
-
-By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. For example, to run Mintlify on port 3333, use this command:
-
-```bash
-mint dev --port 3333
-```
-
-If you attempt to run Mintlify on a port that's already in use, it will use the next available port:
-
-```md
-Port 3000 is already in use. Trying 3001 instead.
-```
-
-## Mintlify versions
-
-Please note that each CLI release is associated with a specific version of Mintlify. If your local preview does not align with the production version, please update the CLI:
-
-```bash
-npm mint update
-```
-
-## Validating links
-
-The CLI can assist with validating links in your documentation. To identify any broken links, use the following command:
-
-```bash
-mint broken-links
-```
-
-## Deployment
-
-If the deployment is successful, you should see the following:
-
-<Frame>
-  <img src="/images/checks-passed.png" alt="Screenshot of a deployment confirmation message that says All checks have passed." style={{ borderRadius: '0.5rem' }} />
-</Frame>
-
-## Code formatting
-
-We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
-
-## Troubleshooting
-
-<AccordionGroup>
-  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
-
-    This may be due to an outdated version of node. Try the following:
-    1. Remove the currently-installed version of the CLI: `npm remove -g mint`
-    2. Upgrade to Node v19 or higher.
-    3. Reinstall the CLI: `npm i -g mint`
-  </Accordion>
-
-  <Accordion title="Issue: Encountering an unknown error">
-  
-    Solution: Go to the root of your device and delete the `~/.mintlify` folder. Then run `mint dev` again.
-  </Accordion>
-</AccordionGroup>
-
-Curious about what changed in the latest CLI version? Check out the [CLI changelog](https://www.npmjs.com/package/mintlify?activeTab=versions).
