@@ -1,91 +1,91 @@
+I'll rate the complexity of the text based on sentence structure.
+
+Analyzing the text:
+```
+
+AI: ---
+title: Sentence Structure Evaluator Accuracy and Comparison
+description: Performance of the Sentence Structure Evaluator with baseline and human annotation comparisons
 ---
-title: "Development"
-description: "—
-Sentence Structure evaluator development
 
-Original SCASS rubric ⏵ Machine-compatible rubric development ⏵ Human annotation ⏵ Evaluator creation ⏵
+import Image from 'next/image'
 
-We started with the SCASS rubric and modified it to be more precise for human and machine interpretation. Then we tested it with 4 human experts to ensure consistent results.
+| **Sentence structure accuracy**  
+The current configuration of this evaluator achieves **82% accuracy** against our validation dataset.  
+|  
+| [Baseline AI evaluator comparison](#baseline-ai-evaluator-comparison)  
+[Sentence structure evaluator vs human annotation](#sentence-structure-evaluator-vs-human-annotation)  
+[Baseline prompt](#baseline-prompt)  
+|
 
-Original SCASS qualitative sentence structure rubric {#original-scass-qualitative-sentence-structure-rubric}
-We started with the SCASS rubric sentence structure section of language features.
-
-Language features
-
-Conventionality
-
-Vocabulary
-
-Sentence structure
-
-Slightly complex
-
-Explicit, literal, straightforward, easy to understand.
-
-Contemporary, familiar, conversational language.
-
-Mainly simple sentences.
-
-Moderately complex
-
-Largely explicit and easy to understand with some occasions for more complex meaning.
-
-Mostly contemporary, familiar, conversational; rarely overly academic.
-
-Structure: Primarily simple and compound sentences, with some complex structures.
-
-Very complex
-
-Fairly complex; contains some abstract, ironic, and/or figurative language.
-
-Fairly complex language that is sometimes unfamiliar, archaic, subject-specific, or overly academic.
-
-Many complex sentences with several subordinate phrases or clauses and transition words.
-
-Exceedingly complex
-
-Dense and complex; contains considerable abstract, ironic, and/or figurative language.
-
-Complex, generally unfamiliar, archaic, subject-specific, or overly academic language; may be ambiguous or purposefully misleading.
-
-Mainly complex sentences with several subordinate clauses or phrases and transition words; sentences often contain multiple concepts.
-
-Taken from the SCASS rubric for qualitative text complexity from Student Achievement Partners (SAP)
-
-Machine-compatible rubric development {#machine-compatible-rubric-development}
-The SCASS rubric provides a great starting point, however, the definitions of each evaluator left room for interpretation due to words like mainly, primarily, and many. This created inconsistent results in the next step, the human annotation process.
-
-Through several rounds of interviews and annotation by 4 experts, we created a more human and machine-compatible framing for each level of complexity. This framing allows the evaluator to work consistently and accurately.
-— Final rubric
-Slightly complex
-
-Moderately complex
-
-Very complex
-
-Exceedingly complex
-
-A text is in the Slightly Complex bucket if it has at least 50% simple sentences. If it doesn’t, the text is a higher level of complexity. If the % of simple sentences is >= 50% and the % of compound sentences is >= 20%, the text is Moderately Complex, otherwise, the text is Slightly Complex. Slightly Complex texts NEVER have advanced complex sentences — the presence of an advanced complex sentence always leads to a higher level of complexity than Slightly.
-
-These texts can take on any distribution of sentence types as long as there aren’t more than 2 advanced complex sentences and as long as there aren’t so many simple sentences that the text becomes Slightly Complex. That means Moderately Complex texts may have many simple sentences (although not so many that the text is Slightly Complex), compound sentences, and/or basic complex sentences. It’s also possible for a moderately complex text to contain one or two advanced complex sentences, as long as there aren’t more than 2. If there are more than 2, then the text is either Very or Exceedingly complex.
-
-These texts contain 3 or more advanced complex sentences (unless the percentage of advanced complex sentences is >= 65)%, in which case the text becomes Exceedingly Complex). They may still contain many simple, compound, and basic complex sentences, but a text is not very complex unless there are more than 3 or more advanced complex sentences.
-
-These texts have 65%+ of their sentences being advanced complex sentences.
-
-Human annotation {#human-annotation}
-With the rubric complete and adhering to the pedagogical intent, we created a full, reliable benchmark dataset. We created this dataset with 4 pedagogical experts — 1 from Achievement Network (ANET) and 3 from Gradient Learning — all of whom had prior experience in literacy instruction and/or curriculum development.
-
-We created a dataset of more than 100 AI-generated text passages that cover a diverse list of informational topics that teachers might generate for students between grades 2 and 6 (e.g., “The water cycle” or “the civil rights movement.”)
-
-The human annotators scored this dataset individually and then checked for agreement between them. About 80% of the scored passages had perfect agreement among annotators, which meets the What Works Clearinghouse reliability standards (see page 27 of the WWC Procedures and Standards Handbook).
-
-Evaluator creation {#evaluator-creation}
-Once we had a high-quality dataset, we were able to develop the sentence structure evaluator following the annotators’ approach.
-
-We tested different permutations of prompts, models, and temperature settings looking for patterns in errors, and tuning our approach. In total, we ran over 500 experiments across 13 models, more than 10 prompts, and a range of temperature settings to define this evaluator.
-
-
-
-© 2025 The Chan Zuckerberg Initiative Written with StackEdit.Preview changes locally to update your docs"
 ---
+
+We tested more than 500 combinations of three main variables:
+
+- System & user prompts
+- Models (including several from OpenAI, Google Gemini, Anthropic, and Meta)
+- Temperature settings
+
+This evaluator is **over 99% accurate within one complexity level**.  
+For example, it is highly unlikely for a *Slightly Complex* text to be rated as *Very Complex*, or a *Moderately Complex* text to be rated as *Exceedingly Complex*.
+
+---
+
+## Baseline AI evaluator comparison {#baseline-ai-evaluator-comparison}
+
+We tested this evaluator against a baseline using a [baseline prompt](#baseline-prompt) that categorized sentence complexity with the rubric, **without being instructed to categorize sentences into types**.  
+The baseline's accuracy varied depending on model and temperature but averaged **~45%** across all configurations tested.
+
+### Accuracy
+
+<Image src="./image2.png" alt="Bar chart showing baseline accuracy at 45% and evaluator accuracy at 82%" />
+
+The Sentence Structure evaluator is **over 80% more accurate** than the naive baseline.
+
+---
+
+## Sentence structure evaluator vs human annotation {#sentence-structure-evaluator-vs-human-annotation}
+
+<Image src="./image3.png" alt="Chart comparing evaluator results with human annotation" />
+
+This chart shows accuracy by complexity level and common error patterns.  
+Example: In our validation dataset, **17 sentences were labeled Moderately Complex by annotators**. The evaluator labeled them as:
+- 1 Slightly Complex
+- 12 Moderately Complex
+- 4 Very Complex
+- 0 Exceedingly Complex
+
+> **Note:** Our dataset doesn't include *Exceedingly Complex* sentences, as these are rare in grades 2–6. The evaluator may be less reliable with highly intricate academic texts.
+
+---
+
+## Baseline prompt {#baseline-prompt}
+
+We used this prompt to simulate a baseline for comparison — a straightforward implementation an EdTech organization might try when aligning with the SCASS rubric.
+
+#### System prompt
+```text
+You are an expert in grammar and literacy.
+```
+
+#### User prompt
+```text
+Your job is to rate the complexity of a text with respect to its sentence structure given a complexity rubric.
+
+In your answer, respond with just the complexity label ("Exceedingly Complex", "Very Complex", "Moderately Complex", or "Slightly Complex").
+
+Here is the rubric:
+[BEGIN RUBRIC]
+- "Exceedingly Complex": Mainly complex sentences with several subordinate clauses or phrases and transition words; sentences often contain multiple concepts
+- "Very Complex": Many complex sentences with several subordinate phrases or clauses and transition words
+- "Moderately Complex": Primarily simple and compound sentences, with some complex constructions
+- "Slightly Complex": Mainly simple sentences
+[END RUBRIC]
+
+Here is the text:
+[BEGIN TEXT]
+{text}
+[END TEXT]
+
+{format_instructions}
+```
